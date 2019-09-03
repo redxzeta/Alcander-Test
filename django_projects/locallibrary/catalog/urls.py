@@ -1,4 +1,4 @@
-from django.urls import path
+""" from django.urls import path
 from . import views
 
 urlpatterns = [
@@ -16,4 +16,12 @@ urlpatterns += [
 
 urlpatterns += [   
     path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
-]
+] """
+
+from rest_framework import routers
+from .api import AuthorViewSet
+
+router = routers.DefaultRouter()
+router.register('api/catalog', AuthorViewSet, 'authors')
+
+urlpatterns = router.urls 
