@@ -1,6 +1,8 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+{% load catalog_tags %}
+
 <h1>Local Library Home</h1>
 
 <p>Welcome to <em>LocalLibrary</em>, a very basic Django website developed as a <a
@@ -22,7 +24,11 @@
     <li><strong>Authors:</strong> {{ num_authors }}</li>
 </ul>
 
+{% if request.user|has_group:"Library Members" %}
+<p>User belongs to my group
+    {% else %}
+    <p>User doesn't belong to mygroup</p>
+    {% endif %}
+    You have visited this page {{ num_visits }} times.
 
-You have visited this page {{ num_visits }} times.
-
-{% endblock %}
+    {% endblock %}

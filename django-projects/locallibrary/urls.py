@@ -13,21 +13,32 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.views.generic import RedirectView
+from django.conf.urls.static import static
+from django.conf import settings
+from django.urls import include
 from django.contrib import admin
 from django.urls import path
+from register import views as v
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+    path("register/", v.register, name="register"),
+    path('accounts/', include('django.contrib.auth.urls')),
+
+    path('catalog/', include('catalog.urls')),
+    path('', RedirectView.as_view(url='/catalog/')),
 
 
-from django.urls import path
-from django.contrib import admin
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 
 # Use include() to add URLS from the catalog application and authentication system
-from django.urls import include
-
-
+""" 
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path("register/", v.register, name="register"),
+]
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
@@ -39,22 +50,19 @@ urlpatterns += [
 
 
 # Use static() to add url mapping to serve static files during development (only)
-from django.conf import settings
-from django.conf.urls.static import static
 
 
-urlpatterns+= static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
-#Add URL maps to redirect the base URL to our application
-from django.views.generic import RedirectView
+# Add URL maps to redirect the base URL to our application
 urlpatterns += [
     path('', RedirectView.as_view(url='/catalog/', permanent=True)),
 ]
 
 
-
-#Add Django site authentication urls (for login, logout, password management)
+# Add Django site authentication urls (for login, logout, password management)
 urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
 ]
+ """

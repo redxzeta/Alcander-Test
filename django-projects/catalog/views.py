@@ -1,3 +1,15 @@
+from .models import Author
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from catalog.forms import RenewBookForm
+from django.contrib.auth.decorators import permission_required
+import datetime
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import generic
 from django.shortcuts import render
 
 # Create your views here.
@@ -11,7 +23,8 @@ def index(request):
     num_books = Book.objects.all().count()
     num_instances = BookInstance.objects.all().count()
     # Available copies of books
-    num_instances_available = BookInstance.objects.filter(status__exact='a').count()
+    num_instances_available = BookInstance.objects.filter(
+        status__exact='a').count()
     num_authors = Author.objects.count()  # The 'all()' is implied by default.
 
     # Number of visits to this view, as counted in the session variable.
@@ -26,9 +39,6 @@ def index(request):
                  'num_instances_available': num_instances_available, 'num_authors': num_authors,
                  'num_visits': num_visits},
     )
-
-
-from django.views import generic
 
 
 class BookListView(generic.ListView):
@@ -53,9 +63,6 @@ class AuthorDetailView(generic.DetailView):
     model = Author
 
 
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-
 class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
     """Generic class-based view listing books on loan to current user."""
     model = BookInstance
@@ -67,7 +74,6 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
 
 
 # Added as part of challenge!
-from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
@@ -81,14 +87,7 @@ class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
         return BookInstance.objects.filter(status__exact='o').order_by('due_back')
 
 
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-import datetime
-from django.contrib.auth.decorators import permission_required
-
 # from .forms import RenewBookForm
-from catalog.forms import RenewBookForm
 
 
 @permission_required('catalog.can_mark_returned')
@@ -124,16 +123,13 @@ def renew_book_librarian(request, pk):
     return render(request, 'catalog/book_renew_librarian.html', context)
 
 
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-from .models import Author
-
-
-class AuthorCreate(PermissionRequiredMixin, CreateView):
+# class AuthorCreate(PermissionRequiredMixin, CreateView):
+class AuthorCreate(LoginRequiredMixin, CreateView):
     model = Author
     fields = '__all__'
-    initial = {'date_of_death': '05/01/2018'}
-    permission_required = 'catalog.can_mark_returned'
+    #initial = {'date_of_death': '05/01/2018'}
+    initial = {'date_of_death': datetime.date.today().strftime("%m/%d/%Y")}
+    #permission_required = 'catalog.can_mark_returned'
 
 
 class AuthorUpdate(PermissionRequiredMixin, UpdateView):
@@ -149,10 +145,10 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
 
 
 # Classes created for the forms challenge
-class BookCreate(PermissionRequiredMixin, CreateView):
+class BookCreate(LoginRequiredMixin, CreateView):
     model = Book
     fields = '__all__'
-    permission_required = 'catalog.can_mark_returned'
+    #permission_required = 'catalog.can_mark_returned'
 
 
 class BookUpdate(PermissionRequiredMixin, UpdateView):
