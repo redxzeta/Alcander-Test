@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     'register.apps.RegisterConfig',
     'catalog.apps.CatalogConfig',  # This object was created for us in /catalog/apps.py
+    'viewusers.apps.ViewusersConfig',
 ]
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 MIDDLEWARE = [

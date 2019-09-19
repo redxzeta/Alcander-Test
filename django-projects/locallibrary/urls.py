@@ -20,12 +20,14 @@ from django.urls import include
 from django.contrib import admin
 from django.urls import path
 from register import views as v
+from viewusers import views as a
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("register/", v.register, name="register"),
+    path("viewusers/", a.viewUsers, name="viewusers"),
     path('accounts/', include('django.contrib.auth.urls')),
-
+    
     path('catalog/', include('catalog.urls')),
     path('', RedirectView.as_view(url='/catalog/')),
 
