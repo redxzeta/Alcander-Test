@@ -1,4 +1,4 @@
-# test
+# library catalog
 how to run:
 
 cd django-projects 
