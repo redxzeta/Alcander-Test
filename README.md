@@ -11,4 +11,4 @@ pipenv shell
 
 python manage.py runserver
 
-python manage.py createsuperuser
+create admin: python manage.py createsuperuser
