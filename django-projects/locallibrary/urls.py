@@ -23,15 +23,12 @@ from register import views as v
 from viewusers import views as a
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
     path("register/", v.register, name="register"),
     path("viewusers/", a.viewUsers, name="viewusers"),
-    path('accounts/', include('django.contrib.auth.urls')),
-    
-    path('catalog/', include('catalog.urls')),
-    path('', RedirectView.as_view(url='/catalog/')),
-
-
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("catalog/", include("catalog.urls")),
+    path("", RedirectView.as_view(url="/catalog/")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 

@@ -11,13 +11,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-#from django.contrib.auth.get_user_model import user
+
+# from django.contrib.auth.get_user_model import user
 
 
 def viewUsers(request):
     if request.user.is_staff:
         users = User.objects.all()
-        return render(request, 'viewList.html', {'data': users, })
+        return render(request, "viewList.html", {"data": users})
     else:
 
         return redirect("/catalog/")  # or your url name
@@ -25,5 +26,6 @@ def viewUsers(request):
 
 class UserListView(generic.ListView):
     """Generic class-based view for a list of books."""
+
     model = User
     paginate_by = 10
