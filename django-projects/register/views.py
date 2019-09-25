@@ -10,7 +10,7 @@ def register(response):
         form = RegisterForm(response.POST)
         if form.is_valid():
             user = form.save()
-            group = Group.objects.get(name='Library Members')
+            group = Group.objects.get(name="Library Members")
             user.groups.add(group)
 
         return redirect("/catalog")

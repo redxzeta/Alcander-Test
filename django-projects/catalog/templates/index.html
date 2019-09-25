@@ -23,12 +23,3 @@
     <li><strong>Copies available:</strong> {{ num_instances_available }}</li>
     <li><strong>Authors:</strong> {{ num_authors }}</li>
 </ul>
-
-{% if request.user|has_group:"Library Members" %}
-<p>User belongs to my group
-    {% else %}
-    <p>User doesn't belong to mygroup</p>
-    {% endif %}
-    You have visited this page {{ num_visits }} times.
-
-    {% endblock %}
